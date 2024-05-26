@@ -9,6 +9,7 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
     steps:
+    
     - name: Checkout repository
       uses: actions/checkout@v2
       
@@ -17,6 +18,12 @@ jobs:
       with:
         terraform_version: 1.0.0
 
+    - name: Install Localstack CLI
+      run: pip install localstack
+
+    - name: Start Localstack
+      run: localstack start -d
+
     - name: Terraform Init
       run: terraform init
 
@@ -24,5 +31,4 @@ jobs:
       run: terraform plan
 
     - name: Terraform Apply
-      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      run: echo 'Success'
+      run: terraform plan -auto-approve
